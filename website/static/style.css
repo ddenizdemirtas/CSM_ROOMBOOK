@@ -1,0 +1,135 @@
+/* Set the font family and font size */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  /* Style the dropdown container */
+  .dropdown {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f1f1f1;
+    text-align: center;
+    border-radius: 5px;
+  }
+  
+  /* Style the dropdown header */
+  .dropdown h2 {
+    font-weight: 500;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Style the dropdown select element */
+  .dropdown select {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    border: none;
+    background-color: #fff;
+    border-radius: 5px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  /* Style the dropdown select element when it's focused */
+  .dropdown select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #7c7cff;
+    flex-direction: column;
+  }
+  
+  /* Style the button container */
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .button-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Style the buttons */
+  .button-col button {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    margin: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #7c7cff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+  }
+
+  #hidden-button {
+    height: 50px;
+    margin: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #7c7cff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    background-color: rgb(51, 204, 102);
+    justify-content : center;
+    margin-left: 20px;
+    width: fit-content;
+    margin: 10px;
+    transform: translate(-50%, -50%);
+    
+  }
+  
+  /* Style the buttons when they're clicked */
+  .button-col button.clicked {
+    background-color: #ff7c7c;
+  }
+  
+  /* Style the hidden button */
+  #hidden-button {
+    display: none;
+  }
+  
+  /* Style the cancel reservation button */
+  #cancel-reservation-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #ff7c7c;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  /* Style the cancel reservation button when it's hovered */
+  #cancel-reservation-btn:hover {
+    background-color: #f55c5c;
+  }
+  
+

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Reservation Picker</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script>
+
+        function cancelReservation() {
+
+            // add an event listener to the cancel button
+
+            $.ajax({
+                url: '/cancel_reservation',
+                type: 'POST',
+                success: function (response) {
+                    // handle the response here
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error); // handle any errors here
+                }
+            });
+
+
+        }
+
+    </script>
+    <script>
+
+        function checkPreviousRes() {
+            // Get the container for previous reservations
+            const previousContainer = document.querySelector(".previous");
+
+            // Check if the container has any child element
+
+            if (previousContainer.children.length - 2 == 0) {
+                // If the container has any child element, hide the dropdown box
+                const dropdownBox = document.getElementById("reservations");
+                dropdownBox.style.display = "flex";
+
+            }
+        }
+        window.onload = checkPreviousRes;
+
+    </script>
+    <script>
+        function showButtons() {
+
+            // Get the selected option from the dropdown box
+            const selectedOption = document.getElementById("reservations").value;
+            let tracker = 0;
+            const data1 = {
+                libraryID: selectedOption,
+            };
+
+            // Get the container for the button row
+            const buttonContainer = document.querySelector(".button-col");
+
+            // Clear any previously displayed buttons
+            buttonContainer.innerHTML = "";
+
+            $.ajax({
+                url: '/run_script',
+                type: 'POST',
+                data: JSON.stringify(data1),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    slots = response;
+                    for (let i = 1; i <= slots.length - 1; i++) {
+                        const button = document.createElement("button");
+                        button.textContent = slots[i];
+                        button.addEventListener('click', function () {
+                            if (tracker % 2 == 0) {
+                                button.classList.toggle('clicked');
+                                document.getElementById("hidden-button").style.display = "inline-block";
+                                const allButtons = document.querySelectorAll(".button-col button");
+                                tracker += 1;
+                                for (let j = 0; j < allButtons.length; j++) {
+                                    if (allButtons[j] !== button) {
+                                        allButtons[j].disabled = true;
+                                        allButtons[j].style.display = 'none';
+                                    }
+                                }
+                            } else {
+                                const allButtons = document.querySelectorAll(".button-col button");
+                                tracker += 1;
+                                document.getElementById("hidden-button").style.display = "none";
+                                for (let j = 0; j < allButtons.length; j++) {
+                                    allButtons[j].disabled = false;
+                                    allButtons[j].classList.remove('clicked');
+                                    allButtons[j].style.display = 'flex';
+                                }
+                            }
+                        });
+                        buttonContainer.appendChild(button);
+                    }
+                    // Show the button row
+                    buttonContainer.style.display = "flex";
+
+                },
+                error: function (error) {
+                    console.log(error); // Handle any errors here
+                }
+            });
+
+            // Show the button row
+            buttonContainer.style.display = "flex";
+        }
+
+        $(document).ready(function () {
+            $("#hidden-button").click(function () {
+                const selectedButton = document.querySelector('.button-col button.clicked');
+                const selectedOption = document.getElementById("reservations").value;
+                const data2 = {
+                    libraryID: selectedOption,
+                    reservation: selectedButton.textContent
+                };
+                $.ajax({
+                    url: '/save_reservation',
+                    type: 'POST',
+                    data: JSON.stringify(data2),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        // Handle the response here
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.log(error); // Handle any errors here
+                    }
+                });
+            });
+        });
+
+        $("#cancel-reservation-btn").click(function () {
+            const dropdownBox = document.getElementById("reservations");
+            dropdownBox.style.display = "block";
+        });
+
+
+
+
+    </script>
+
+
+</head>
+
+<body>
+    <!-- dropdown box with options -->
+    <div class="dropdown">
+        <h2>Schedule your reservation</h2>
+        <select id="reservations" style="display: none;" onchange="showButtons()">
+            <option value="">Libraries</option>
+            <option value="s-lc-8862">Earth Sciences &amp; Map Library</option>
+            <option value="s-lc-8863">Engineering Library</option>
+            <option value="s-lc-8864">East Asian Library</option>
+            <option value="s-lc-8865">Environmental Design Library</option>
+            <option value="s-lc-8866">Institute of Governmental Studies (Moses Hall 111)</option>
+            <option value="s-lc-8867">Gardner Main Stacks</option>
+            <option value="s-lc-8868">Moffitt Library</option>
+        </select>
+
+        <!-- container for the button row -->
+        <div class="button-container">
+            <div class="button-col" style="display: none;"></div>
+        </div>
+
+        <button id="hidden-button" style="display: none;" onclick="make_reservation()">Confirm</button>
+
+
+
+        <div class="previous">
+            <h2>Your previous reservations</h2>
+            {% if schedules %}
+            <button id="cancel-reservation-btn" onclick="cancelReservation()">Cancel current reservation to make a new
+                one</button>
+            {% for schedule in schedules %}
+            <h1>
+                {{ schedule.libraryID }}, {{ schedule.reservation }}
+            </h1>
+
+            {% endfor %}
+            {% else %}
+            <p>You don't have any previous reservations.</p>
+            {% endif %}
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>
